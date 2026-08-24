@@ -1,9 +1,9 @@
 import { MIVPage } from "..";
-import { DocClient } from "./docclient";
+import { MIVClient } from "mivts";
 
 declare global {
     interface Window {
-        docClient: DocClient | undefined,
+        client: MIVClient | undefined,
         currentPage: MIVPage | undefined
     }
 }
