@@ -1,0 +1,53 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Client (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3001",
+      "webRoot": "${workspaceFolder}/client/src",
+      "preLaunchTask": "Start Webpack Dev Server",
+      //"postDebugTask": "Stop Webpack Dev Server",
+      "sourceMapPathOverrides": {
+        "webpack-internal:/client/src/*": "${workspaceFolder}/client/src/*",
+        "webpack-internal://client/src/*": "${workspaceFolder}/client/src/*",
+        "webpack-internal:///client/src/*": "${workspaceFolder}/client/src/*",
+        "webpack:///./*": "${workspaceFolder}/*",
+        "webpack:///./src/*": "${workspaceFolder}/client/src/*",
+        "webpack://?:*/*": "${workspaceFolder}/*",
+        "webpack://mivdoc/./src/*": "${workspaceFolder}/client/src/*"
+      }
+    },
+    {
+      "name": "Debug Server",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node-dev",
+      "runtimeArgs": [
+        "--respawn",
+        "--transpile-only",
+        "--inspect=9229",
+        "--project",
+        "${workspaceFolder}/server/tsconfig.json"
+      ],
+      "args": [
+        "${workspaceFolder}/server/src/index.ts"
+      ],
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug Full Stack",
+      "configurations": [
+        "Debug Server",
+        "Debug Client (Chrome)"
+      ],
+      "stopAll": true
+    }
+  ]
+}

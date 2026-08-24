@@ -1,0 +1,11 @@
+{
+  "editor.formatOnSave": true,
+  "eslint.validate": [
+    "typescript"
+  ],
+  "files.exclude": {
+    "**/node_modules": true,
+    "client/dist": true,
+    "server/dist": true
+  }
+}
