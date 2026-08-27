@@ -46,7 +46,7 @@ async function navigateAsync(path: string, highlightTarget: boolean): Promise<vo
 }
 
 // Handle back/forward browser buttons
-window.addEventListener("popstate", (evt) => navigateAsync(window.location.pathname, true));
+window.addEventListener("popstate", (evt) => runAsync(navigateAsync(window.location.pathname, true)));
 
 // Intercept all <a> clicks to use client-side navigation
 document.addEventListener("click", (e) => {
@@ -58,7 +58,7 @@ document.addEventListener("click", (e) => {
         const href = target.getAttribute("href");
         if ((!href) || href.startsWith("http") || href.startsWith("//") || href.startsWith("www")) return;
         e.preventDefault();
-        navigateAsync(href, true);
+        runAsync(navigateAsync(href, true));
     }
 });
 export function preventNavigation(a: HTMLAnchorElement): void {
