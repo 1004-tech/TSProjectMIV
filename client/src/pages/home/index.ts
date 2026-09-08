@@ -15,7 +15,7 @@ export class HomePage extends MIVPage {
         // TODO
     }
 
-    protected ResolvePathAndNavigateAsync(path: string, highlightTarget: boolean): Promise<void> {
+    protected ResolvePathAndNavigateAsync(path: string, samePathAsCurrent: boolean): Promise<void> {
         // TODO
         return Promise.resolve();
     }
