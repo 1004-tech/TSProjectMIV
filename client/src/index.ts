@@ -25,7 +25,7 @@ function getPageName(withSlashes: string | undefined | null): string {
     return withSlashes;
 }
 
-async function navigateAsync(path: string): Promise<void> {
+export async function navigateAsync(path: string): Promise<void> {
     const result = regx.exec(path);
     let page: MIVPage;
     if (result === undefined || result == null || result.length <= 0) {
