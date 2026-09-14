@@ -1,4 +1,4 @@
-import { ErrorMessage } from "mivts";
+import { ErrorMessage } from "@1oo4/miv";
 
 export function handleError(error: ErrorMessage | undefined, unexpectedIfUndefined: boolean = false) {
     // TODO : hanlde each type of error
