@@ -1,4 +1,4 @@
-import { ErrorMessage } from "mivts";
+import { ErrorMessage } from "@1oo4/miv";
 
 export function handleError(error: ErrorMessage | undefined, unexpectedIfUndefined: boolean = false) {
     // TODO : hanlde each type of error
@@ -39,13 +39,25 @@ export abstract class MIVPage {
         }
     }
 
+    private isBasePath(path: string): boolean {
+        return path == "/" + this.URLName || path == "/" + this.URLName + "/";
+    }
+
+    getSamePagePath(requiredPath: string): string {
+        if (this.last_navigation_path !== undefined && this.isBasePath(requiredPath)) {
+            return this.last_navigation_path;
+        } else {
+            return requiredPath;
+        }
+    }
+
     async openAsync_return_actual_path(requiredPath: string): Promise<string> {
         this.html.style.display = "flex";
         await this.OpenAsync();
         if (this.last_navigation_path === undefined) {
             return requiredPath;
         } else {
-            if (requiredPath == "/" + this.URLName || requiredPath == "/" + this.URLName + "/") {
+            if (this.isBasePath(requiredPath)) {
                 return this.last_navigation_path;
             } else {
                 return requiredPath;
@@ -60,16 +72,12 @@ export abstract class MIVPage {
     protected abstract OpenAsync(): Promise<void>;
     protected abstract Close(): void;
 
-    /** @internal */
-    navigatePathAsync(path: string, highlightTarget: boolean): Promise<void> {
-        if (this.last_navigation_path === path) {
-            return Promise.resolve();
-        } else {
-            this.last_navigation_path = path;
-            return this.ResolvePathAndNavigateAsync(path, highlightTarget);
-        }
+    navigatePathAsync(path: string): Promise<void> {
+        const samePathAsCurrent = (this.last_navigation_path == path);
+        this.last_navigation_path = path;
+        return this.ResolvePathAndNavigateAsync(path, samePathAsCurrent);
     }
-    protected abstract ResolvePathAndNavigateAsync(path: string, highlightTarget: boolean): Promise<void>;
+    protected abstract ResolvePathAndNavigateAsync(path: string, samePathAsCurrent: boolean): Promise<void>;
 
     protected SetCurrentPath(path: string, pushState: boolean): void {
         this.last_navigation_path = path;

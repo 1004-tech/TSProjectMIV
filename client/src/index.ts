@@ -25,7 +25,7 @@ function getPageName(withSlashes: string | undefined | null): string {
     return withSlashes;
 }
 
-async function navigateAsync(path: string, highlightTarget: boolean): Promise<void> {
+export async function navigateAsync(path: string): Promise<void> {
     const result = regx.exec(path);
     let page: MIVPage;
     if (result === undefined || result == null || result.length <= 0) {
@@ -35,18 +35,18 @@ async function navigateAsync(path: string, highlightTarget: boolean): Promise<vo
     }
     let actualPath: string;
     if (page == window.currentPage) {
-        actualPath = path;
+        actualPath = page.getSamePagePath(path);
     } else {
         window.currentPage?.close();
         window.currentPage = page;
         actualPath = await page.openAsync_return_actual_path(path);
     }
     window.history.pushState({}, "", actualPath);
-    await page.navigatePathAsync(actualPath, highlightTarget);
+    await page.navigatePathAsync(actualPath);
 }
 
 // Handle back/forward browser buttons
-window.addEventListener("popstate", (evt) => navigateAsync(window.location.pathname, true));
+window.addEventListener("popstate", (evt) => runAsync(navigateAsync(window.location.pathname)));
 
 // Intercept all <a> clicks to use client-side navigation
 document.addEventListener("click", (e) => {
@@ -58,15 +58,14 @@ document.addEventListener("click", (e) => {
         const href = target.getAttribute("href");
         if ((!href) || href.startsWith("http") || href.startsWith("//") || href.startsWith("www")) return;
         e.preventDefault();
-        navigateAsync(href, true);
+        runAsync(navigateAsync(href));
     }
 });
 export function preventNavigation(a: HTMLAnchorElement): void {
     a.toggleAttribute('prevent-navigation');
 }
 
-// Resolve the current URL on startup
-runAsync(navigateAsync(window.location.pathname, true));
+runAsync(navigateAsync(window.location.pathname));
 
 // ********************************
 // -- HOW TO ADD AN IMAGE --
