@@ -1,6 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 /** @type {import('webpack').Configuration} */
 module.exports = (env, argv) => {
@@ -34,6 +35,13 @@ module.exports = (env, argv) => {
           exclude: /node_modules/,
         },
         {
+          test: /\.(png|jpg|jpeg|gif|svg|webp|ico)$/i,
+          type: "asset/resource",
+          generator: {
+            filename: "public/[name].[hash][ext]",
+          },
+        },
+        {
           test: /\.css$/i,
           use: [
             // In production: extract to a .css file
@@ -48,6 +56,11 @@ module.exports = (env, argv) => {
       new HtmlWebpackPlugin({
         template: "./client/src/index.html",
         minify: isProd,
+      }),
+      new CopyWebpackPlugin({
+        patterns: [
+          { from: "./client/public", to: "." },
+        ],
       }),
       // Only emit a .css file in production
       ...(isProd
