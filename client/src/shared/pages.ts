@@ -42,6 +42,9 @@ export abstract class MIVPage {
     private isBasePath(path: string): boolean {
         return path == "/" + this.URLName || path == "/" + this.URLName + "/";
     }
+    protected isCurrentlyBasePath(): boolean {
+        return this.last_navigation_path === undefined || this.isBasePath(this.last_navigation_path);
+    }
 
     getSamePagePath(requiredPath: string): string {
         if (this.last_navigation_path !== undefined && this.isBasePath(requiredPath)) {

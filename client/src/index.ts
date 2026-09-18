@@ -25,7 +25,7 @@ function getPageName(withSlashes: string | undefined | null): string {
     return withSlashes;
 }
 
-export async function navigateAsync(path: string): Promise<void> {
+export async function navigateAsync(path: string, pushState: boolean = true): Promise<void> {
     const result = regx.exec(path);
     let page: MIVPage;
     if (result === undefined || result == null || result.length <= 0) {
@@ -41,12 +41,14 @@ export async function navigateAsync(path: string): Promise<void> {
         window.currentPage = page;
         actualPath = await page.openAsync_return_actual_path(path);
     }
-    window.history.pushState({}, "", actualPath);
+    if (pushState) window.history.pushState({}, "", actualPath);
     await page.navigatePathAsync(actualPath);
 }
 
 // Handle back/forward browser buttons
-window.addEventListener("popstate", (evt) => runAsync(navigateAsync(window.location.pathname)));
+window.addEventListener("popstate", (evt) =>
+    runAsync(navigateAsync(window.location.pathname))
+);
 
 // Intercept all <a> clicks to use client-side navigation
 document.addEventListener("click", (e) => {
