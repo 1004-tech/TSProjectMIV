@@ -67,5 +67,23 @@ export function preventNavigation(a: HTMLAnchorElement): void {
     a.toggleAttribute('prevent-navigation');
 }
 
-// Resolve the current URL on startup
 runAsync(navigateAsync(window.location.pathname));
+
+// ********************************
+// -- HOW TO ADD AN IMAGE --
+/*
+// put the image in the "client/public" folder, then :
+
+// option 1 in a TS file
+import imgUrl from "../public/myimage.png"; (or "../../../public/myimage.png" if used in a "/pages/xxx/index.ts")
+(document.getElementById("my_image") as HTMLImageElement).src = imgUrl;
+
+// option 2 in a page's CSS
+.some_div {
+  background-image: url("../../../public/myimage.png");
+}
+
+// option 3 in the main "index.html"
+<img src="/myimage.png" alt="My Image" />
+
+*/
