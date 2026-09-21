@@ -64,6 +64,7 @@ document.addEventListener("click", (e) => {
     }
 });
 export function preventNavigation(a: HTMLAnchorElement): void {
+    // this technique will not work correctly if you use stopPropagation in another click handler for this <a>, because the "click" handler above may not be triggered
     a.toggleAttribute('prevent-navigation');
 }
 

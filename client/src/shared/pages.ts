@@ -22,6 +22,7 @@ export abstract class MIVPage {
     private static readonly ALL_PAGES: Array<MIVPage> = new Array();
     public readonly URLName: string;
     private readonly html: HTMLDivElement;
+    private opening_path: string | undefined;
     private last_navigation_path: string | undefined;
 
     constructor(elemID: string, urlName: string) {
@@ -42,8 +43,11 @@ export abstract class MIVPage {
     private isBasePath(path: string): boolean {
         return path == "/" + this.URLName || path == "/" + this.URLName + "/";
     }
-    protected isCurrentlyBasePath(): boolean {
+    isCurrentPathBase(): boolean {
         return this.last_navigation_path === undefined || this.isBasePath(this.last_navigation_path);
+    }
+    isOpeningBasePath() {
+        return this.opening_path !== undefined && this.isBasePath(this.opening_path);
     }
 
     getSamePagePath(requiredPath: string): string {
@@ -55,17 +59,18 @@ export abstract class MIVPage {
     }
 
     async openAsync_return_actual_path(requiredPath: string): Promise<string> {
-        this.html.style.display = "flex";
-        await this.OpenAsync();
+        this.html.style.display = 'flex';
         if (this.last_navigation_path === undefined) {
-            return requiredPath;
+            this.opening_path = requiredPath;
         } else {
             if (this.isBasePath(requiredPath)) {
-                return this.last_navigation_path;
+                this.opening_path = this.last_navigation_path;
             } else {
-                return requiredPath;
+                this.opening_path = requiredPath;
             }
         }
+        await this.OpenAsync();
+        return this.opening_path;
     }
     close(): void {
         this.html.style.display = "none";
