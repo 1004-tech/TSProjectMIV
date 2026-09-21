@@ -24,11 +24,13 @@ export abstract class MIVPage {
     private readonly html: HTMLDivElement;
     private opening_path: string | undefined;
     private last_navigation_path: string | undefined;
+    private readonly navIDs: Array<string> | undefined;
 
-    constructor(elemID: string, urlName: string) {
+    constructor(elemID: string, urlName: string, ...navIDs: string[]) {
         this.URLName = urlName;
         this.html = document.getElementById(elemID) as HTMLDivElement
         this.html.style.display = "none";
+        this.navIDs = navIDs;
         MIVPage.ALL_PAGES.push(this);
     }
 
@@ -37,6 +39,22 @@ export abstract class MIVPage {
             const page = this.ALL_PAGES[i];
             routes.set(page.URLName, page);
             page.html.style.display = "none";
+        }
+    }
+
+    static currentPageChanged(current: MIVPage) {
+        for (let i = 0; i < MIVPage.ALL_PAGES.length; i++) {
+            const page = MIVPage.ALL_PAGES[i];
+            if (page.navIDs) {
+                for (let i = 0; i < page.navIDs.length; i++) {
+                    const nav = document.getElementById(page.navIDs[i]) as HTMLAnchorElement;
+                    if (page == current) {
+                        nav.classList.add("is-selected");
+                    } else {
+                        nav.classList.remove("is-selected");
+                    }
+                }
+            }
         }
     }
 

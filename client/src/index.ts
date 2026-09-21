@@ -40,6 +40,7 @@ export async function navigateAsync(path: string, pushState: boolean = true): Pr
         window.currentPage?.close();
         window.currentPage = page;
         actualPath = await page.openAsync_return_actual_path(path);
+        MIVPage.currentPageChanged(page);
     }
     if (pushState) window.history.pushState({}, "", actualPath);
     await page.navigatePathAsync(actualPath);

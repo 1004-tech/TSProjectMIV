@@ -4,7 +4,7 @@ import "./other.css";
 export class OtherPage extends MIVPage {
 
     constructor() {
-        super("page_other", "other");
+        super("page_other", "other", "nav_other");
     }
 
     OpenAsync(): Promise<void> {

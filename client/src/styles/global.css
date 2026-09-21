@@ -20,3 +20,12 @@ footer {
     display: flex;
     overflow: hidden;
 }
+
+header nav a.is-selected {
+    color: blue;
+    font-weight: bold;
+}
+
+header nav a:not(.is-selected) {
+    color: rgb(64, 64, 128);
+}

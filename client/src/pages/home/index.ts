@@ -4,7 +4,7 @@ import "./home.css";
 export class HomePage extends MIVPage {
 
     constructor() {
-        super("page_home", "home");
+        super("page_home", "home", "nav_home");
     }
 
     OpenAsync(): Promise<void> {
